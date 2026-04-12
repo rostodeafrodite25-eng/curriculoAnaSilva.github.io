@@ -1,0 +1,1501 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>UFCD Ana Maria Silva </title>
+  <style>
+    *{margin:0;padding:0;box-sizing:border-box;}
+    html,body{
+      width:100vw;height:100vh;
+      background: url('generated-image2.png') center/cover no-repeat;
+      font-family:'Segoe UI',Arial,sans-serif;
+      color:#f5f7fa;overflow:hidden;
+    }
+    .top-hud{
+      position:fixed;top:0;left:0;width:100vw;height:58px;
+      background:rgba(18,26,36,0.90);
+      display:flex;align-items:center;padding:0 32px;
+      z-index:9999;border-bottom:2.5px solid #42aaff;
+      box-shadow:0 2px 18px #12244477;
+    }
+    .hud-left{display:flex;align-items:center;gap:18px;}
+    .back-btn{
+      background:none;border:none;color:#e9f5fa;font-size:1.5em;
+      cursor:pointer;display:flex;align-items:center;justify-content:center;
+      width:40px;height:40px;transition:filter .12s;
+    }
+    .back-btn:hover{filter:brightness(1.22) drop-shadow(0 2px 6px #069cffbb);}
+    .hud-title{font-size:1.3em;font-weight:600;letter-spacing:.06em;color:#42aaff;}
+
+    .carousel-section{
+      position:fixed;top:58px;left:0;width:100vw;height:320px;
+      overflow:hidden;padding:40px 0 40px 90px;
+      background:linear-gradient(to bottom,rgba(0,0,0,0.2),transparent);
+    }
+    .carousel-track{
+      display:flex;gap:38px;align-items:flex-end;
+      transition:transform .43s cubic-bezier(.42,1,.72,1);
+    }
+    .carousel-item-wrapper{
+      position:relative;display:flex;flex-direction:column;align-items:center;
+    }
+    .carousel-item{
+      width:160px;height:240px;background:#23283a;border:2.5px solid transparent;
+      border-radius:8px;cursor:pointer;overflow:hidden;
+      display:flex;align-items:center;justify-content:center;position:relative;
+      transition:transform .22s cubic-bezier(.32,1.35,.62,1),
+                 box-shadow .18s,border .18s;
+    }
+    .carousel-item img{width:100%;height:100%;object-fit:cover;}
+    .carousel-item::after{
+      content:'';position:absolute;inset:0;
+      background:linear-gradient(135deg,rgba(0,0,0,0.3),rgba(66,170,255,0.1));
+      pointer-events:none;
+    }
+    .carousel-item.selected{
+      transform:scale(1.22);
+      box-shadow:0 0 40px 5px #42aaffcc,0 5px 35px #000c;
+      border-color:#42aaff;
+    }
+    .item-label{
+      display:none;position:absolute;bottom:-45px;left:50%;
+      transform:translateX(-50%);
+      background:rgba(10,14,28,0.88);
+      padding:8px 16px;border-radius:6px;
+      border:1px solid rgba(66,170,255,0.3);
+      white-space:nowrap;color:#f5f7fa;font-size:.9em;font-weight:500;
+    }
+    .carousel-item.selected ~ .item-label{display:block;}
+
+    .detail-section{
+      position:fixed;top:378px;left:0;width:100vw;
+      height:calc(100vh - 378px);overflow-y:auto;
+      padding:40px 90px 60px;
+      background:linear-gradient(to bottom,rgba(0,0,0,0.8),transparent);
+    }
+
+    .detail-inner{
+      display:grid;
+      grid-template-columns:300px 1fr 1fr;
+      gap:28px;align-items:start;max-width:1500px;
+    }
+
+    .cover-image{
+      width:100%;height:240px;border-radius:16px;border:2px solid #42aaff;
+      object-fit:cover;box-shadow:0 8px 32px rgba(0,0,0,0.4);
+    }
+    .info-central{color:#f5f7fa;display:flex;flex-direction:column;}
+    .info-central h1{
+      font-size:2.1em;letter-spacing:.14em;text-transform:uppercase;
+      margin:0 0 8px;text-shadow:0 3px 10px #000;font-weight:600;color:#42aaff;
+    }
+    .info-central .tagline{margin:0 0 16px;opacity:.9;font-weight:500;color:#dfe8ff;}
+    .info-central p{margin:0 0 12px;font-size:.95em;line-height:1.6;color:#dfe8ff;}
+    .info-buttons{margin-top:16px;display:flex;gap:12px;flex-wrap:wrap;}
+    .btn-detail{
+      background:linear-gradient(135deg,#14aaff 60%,#75d5ff 120%);
+      border:none;color:#fff;padding:10px 22px;font-weight:600;
+      border-radius:6px;cursor:pointer;font-size:.9em;letter-spacing:.04em;
+      transition:all .3s ease;
+    }
+    .btn-detail:hover{
+      transform:translateY(-2px);
+      box-shadow:0 8px 20px rgba(20,170,255,0.4);
+    }
+
+    .details-column{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:16px;
+      align-items:start;
+    }
+
+    .detail-box{
+      position:relative;
+      border-radius:16px;
+      border:2px solid #42aaff;
+      box-shadow:0 10px 30px rgba(0,0,0,0.7);
+      background:rgba(8,12,24,0.8);
+      max-height:280px;
+    }
+    .detail-box-content{
+      width:100%;
+      max-height:280px;
+      overflow-y:auto;
+      padding:20px;
+      display:flex;
+      flex-direction:column;
+      color:#dfe8ff;
+      font-size:.9em;
+      line-height:1.6;
+      scrollbar-width:none;
+    }
+    .detail-box-content::-webkit-scrollbar{width:0;}
+
+    .scroll-track{
+      position:absolute;
+      top:10px;
+      right:8px;
+      width:4px;
+      bottom:10px;
+      border-radius:999px;
+      background:rgba(255,255,255,0.05);
+    }
+    .scroll-thumb{
+      position:absolute;
+      top:0;
+      left:0;
+      width:100%;
+      height:35px;
+      border-radius:999px;
+      background:linear-gradient(180deg,#42aaff,#75d5ff);
+    }
+
+    .detail-box-content h3{
+      color:#42aaff;margin:0 0 12px;font-size:1em;font-weight:600;
+    }
+    .detail-box-content ul{margin:0;padding-left:18px;list-style:none;}
+    .detail-box-content li{margin-bottom:8px;}
+    .detail-box-content li::before{
+      content:'✓ ';color:#42aaff;font-weight:600;margin-right:6px;
+    }
+    .skills-section{
+      margin-top:16px;padding-top:16px;
+      border-top:1px solid rgba(66,170,255,0.2);
+    }
+    .skills-wrap{display:flex;flex-wrap:wrap;gap:6px;}
+    .skill-tag{
+      background:rgba(66,170,255,0.15);
+      border:1px solid rgba(66,170,255,0.4);
+      color:#42aaff;padding:4px 10px;border-radius:12px;
+      font-size:.8em;font-weight:500;
+    }
+
+    .pdf-box{
+      position:relative;
+      border-radius:16px;
+      border:2px solid #42aaff;
+      background:rgba(8,12,24,0.9);
+      padding:16px 18px;
+      box-shadow:0 10px 30px rgba(0,0,0,0.7);
+      max-height:280px;
+      overflow:hidden;
+    }
+    .pdf-box-inner{
+      max-height:248px;
+      overflow-y:auto;
+      padding-right:8px;
+      scrollbar-width:none;
+    }
+    .pdf-box-inner::-webkit-scrollbar{width:0;}
+
+    .pdf-box h3{
+      margin:0 0 10px;
+      font-size:1em;
+      font-weight:600;
+      color:#42aaff;
+    }
+    .pdf-item{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      padding:6px 4px;
+      border-radius:10px;
+      cursor:pointer;
+      text-decoration:none;
+      transition:background .2s ease, transform .15s ease;
+    }
+    .pdf-item:hover{
+      background:rgba(66,170,255,0.12);
+      transform:translateX(2px);
+    }
+    .pdf-icon{
+      width:26px;height:26px;border-radius:6px;
+      background:linear-gradient(135deg,#ff4b4b,#ff9b71);
+      display:flex;align-items:center;justify-content:center;
+      color:#fff;font-weight:700;font-size:.8em;
+      box-shadow:0 0 10px rgba(0,0,0,.4);
+    }
+    .pdf-text-main{font-size:.9em;color:#f5f7fa;font-weight:500;}
+    .pdf-text-sub{font-size:.78em;color:#c5d6ff;opacity:.85;}
+  </style>
+</head>
+<body>
+  <div class="top-hud">
+    <div class="hud-left">
+      <button class="back-btn" onclick="window.location.href='index.html?skipIntro=1'">←</button>
+      <span class="hud-title">EXPERIÊNCIAS</span>
+    </div>
+  </div>
+
+  <div class="carousel-section">
+    <div class="carousel-track" id="carouselTrack"></div>
+  </div>
+
+  <div class="detail-section" id="detailSection"></div>
+
+  <script>
+    const experiencias = [
+      {
+        id: 1,
+        title: "0563 - Legislação Comercial",
+        role: "Formadora:      Isabel Silva ",
+        description: "Carga horária:     25 horas ",
+        date: "Data da condocência - 04/12/25",
+        carouselImage: "0563.jpeg",
+        cover: "Captura de ecrã 2026-03-21 220831.png",
+        sideCards: [
+          { title: "Competências" },
+          { title: "Responsabilidades" },
+          { title: "Área" }
+        ],
+        responsibilities: [
+          "Cumprimento da legislação comercial",
+          "Responsabilidade no enquadramento jurídico das empresa",
+          "Responsabilidade contratual",
+          "Responsabilidade documental",
+          "Responsabilidade profissional"
+        ],
+        skills: ["Conhecimento do Código Comercial português", "Noções de Direito Comercial", "Interpretação de contratos", "Enquadramento jurídico de empresas","Conhecimento de títulos de crédito", "Aplicação de normas legais à atividade empresarial","Noções de responsabilidade civil e comercial"],
+        achievements: [
+          "Trabalho_Onde não há lei, não há liberdade",
+          "Trabalho de Grupo - A Empresa e o Direito "
+        ],
+        pdfs: [
+          {
+            file: "PRA_UFCD 0563_Ana_Silva.pdf",
+            titulo: "PRA",
+            subtitulo: "Reflexão da UFCD 0563"
+          }
+        ],
+        anexos: [
+          {
+            file: "25_TADM03-NS_John_Locke_Ana_Silva.pdf",
+            titulo: "Trabalho de opinião",
+            subtitulo: "Onde não há não há liberdade"
+          },
+          {
+            file: "TG - Legislação Comercial_25_TADM03-NS_as_eg_mf_jb2.pdf", 
+            titulo: "Trabalho de Grupo",
+            subtitulo: "A Empresa e o Direito"
+          }
+        ]
+      },
+      {
+        id: 2,
+        title: "0571 - Aplicações Informáticas de Gestão",
+        role: "Formador: António Carmo ",
+        description: "Carga horária: 25 horas ",
+        date: "Data da condocência - 19/11/25",
+        carouselImage: "0571.jpeg",
+        cover: "Captura de ecrã 2026-03-21 220823.png",
+        sideCards: [
+          { title: "Competências" },
+          { title: "Responsabilidades" },
+          { title: "Área" }
+        ],
+        responsibilities: [
+          "",
+          "",
+          "",
+          ""
+        ],
+        skills: [""],
+        achievements: [
+          "Tarefa 1 - Ficha Diagnóstica",
+          "Trabalho de Grupo - Software AstorGes"
+        ],
+        pdfs: [
+          {
+            file: "PRA_UFCD 0571_Ana_Silva.pdf",
+            titulo: "Pra",
+            subtitulo: "Reflexão da UFCD 0571"
+          }
+        ],
+        anexos: [
+          {
+            file: "Tarefa nº1 - Ficha diagnóstica_Ana_Silva.pdf",
+            titulo: "Ficha Diagnóstica",
+            subtitulo: "Tarefa 1"
+          },
+          {
+            file: "maiores_clientes.pdf",
+            titulo: "Trabalho de Grupo - AstorGes",
+            subtitulo: "Tarefa 2 - trabalhar com o software AstorGes"
+          }
+        ]
+      },
+      {
+        id: 3,
+        title: "0651 - Técnicas de Digitalização",
+        role: "Formador: Gabriel Cunha ",
+        description: "Carga horária: 50 horas",
+        date: "Data da condocência - 29/07/25",
+        carouselImage: "generated-image (3).png",
+        cover: "Captura de ecrã 2026-03-21 214256.png",
+        sideCards: [
+         { title: "Competências" },
+          { title: "Responsabilidades" },
+          { title: "Área" }
+        ],
+        responsibilities: [
+          "",
+          "",
+          ""
+        ],
+        skills: [""],
+        achievements: [
+          "Teste de Ergonomia no Posto de trabalho",
+          "Exercícios a realizar no WORD",
+          "Teste Final"
+        ],
+        pdfs: [
+          {
+            file: "PRA_UFCD 0651_Ana_Silva.pdf",
+            titulo: "Pra",
+            subtitulo: "Reflexão da UFCD 0651"
+          }
+        ],
+        anexos: [
+          {
+            file: "teste_Ergonomia do Posto de Trabalho_Ana_Silva.pdf",
+            titulo: "Teste de Ergonomia",
+            subtitulo: "Tarefa 1"
+          },
+          {
+            file: "exercicios em word1.pdf",
+            titulo: "Exercicios a realizar em Word",
+            subtitulo: "Tarefa 2 - trabalhar com o Word"
+          },
+          {
+            file: "Ficha avaliação final UFCD 0651- Parte 1 - Ergonomia e Técnicas de Digitação_correção.pdf",
+            titulo: "Teste Final_1",
+            subtitulo: "Parte 1"
+          },
+          {
+            file: "25_TADM03-NS_Ficha de avaliação final Parte 2_Ana_Silva.pdf",
+            titulo: "Teste Final_2",
+            subtitulo: "Parte 2"
+          },
+          {
+            file: "25_TADM03-N_SFicha de avaliação final UFCD 0651 Parte 3_Ana_Silva.pdf",
+            titulo: "Teste Final_3",
+            subtitulo: "Parte 3"
+          }              
+        ]
+      },
+      {
+        id: 4,
+        title: "0653 - Arquivo - organização e manutenção",
+        role: "Formador: António César",
+        description: "Carga horária: 25 horas",
+        date: "Data da condocência - 19/09/25",
+        carouselImage: "generated-image (4).png",
+        cover: "Captura de ecrã 2026-03-21 215416.png",
+        sideCards: [
+          { title: "Competências" },
+          { title: "Responsabilidades" },
+          { title: "Área" }
+        ],
+        responsibilities: [
+          "",
+          "",
+          ""
+        ],
+        skills: [""],
+        achievements: [
+          ""
+        ],
+        pdfs: [
+          {
+            file: "PRA_UFCD 0653_Ana_Silva.pdf",
+            titulo: "Pra",
+            subtitulo: "Reflexão da UFCD 0653"
+           }
+        ],
+        anexos: [
+          {
+            file:" 25_TADM03-NS_trabalho_prazos_arquivo_Ana_Silva.pptx (1).pdf",
+            titulo: "Prazos de Arquivo",
+            subtitulo: "Tarefa 1 - Trabalho sobre os Prazos de Arquivo"
+          },
+          {
+            file: "ARQUIVO FÍSICO.pdf",
+            titulo: "Capa do arquivo Físico",
+            subtitulo: "Tarefa 2 - fazer um Arquivo Físico"
+          },
+          {
+            file: "Folha_Resumo_Pasta_Arquivo.pdf",
+            titulo: "Pasta Corrente",
+            subtitulo: "Tarefa 3 - Índice da Pasta Corrente"
+          },
+          {
+            file: "Folha_Resumo_Pasta_Arquivo_permanente.pdf",
+            titulo: "Pasta Permanente",
+            subtitulo: "Tarefa 4 - Índice da Pasta Permanente"
+          }            
+        ]
+      },
+      {
+        id: 5,
+        title: "0654 - Ficheiros de contactos - organização e manutenção",
+        role: "Formador: Gabriel Cunha",
+        description: "Carga horária: 25 horas",
+        date: "Data da condocência - 03/12/25",
+        carouselImage: "generated-image (5).png",
+        cover: "Captura de ecrã 2026-03-21 215647.png",
+        sideCards: [
+          { title: "Competências" },
+          { title: "Responsabilidades" },
+          { title: "Área" }
+        ],
+        responsibilities: [
+          "",
+          "",
+          ""
+        ],
+        skills: [""],
+        achievements: [
+          ""
+        ],
+        pdfs: [
+          {
+            file: "PRA_UFCD 0654 _Ana_Silva.pdf",
+            titulo: "Pra",
+            subtitulo: "Reflexão da UFCD 0654"
+          }
+        ],
+        anexos: [
+          {
+            file:"UFCD 0654 – Ficheiros de Contactos_ Organização e manutenção TADM03.pdf",
+            titulo: "Teste - Ficheiros Contactos",
+            subtitulo: "Tarefa 1 - Teste 1"
+          },
+          {
+            file: "Ficha_formativa_25TADM03-NS_Ana_Silva_Correção.pdf",
+            titulo: "Ficha Formativa",
+            subtitulo: "Tarefa 2 - Ficha Formativa"
+          },
+          {
+            file: "validação do NIF.pdf",
+            titulo: "Validação número contribuinte",
+            subtitulo: "Tarefa 3 - validar o NIF"
+          }
+          ]
+      },
+      {
+        id: 6,
+        title: "0656 - Técnicas Documentais em Língua Portuguesa",
+        role: "Formadora: Vanda Frederico",
+        description: "Carga horária: 50 horas",
+        date: "Data da condocência - 28/10/25",
+        carouselImage: "0656.jpeg",
+        cover: "Captura de ecrã 2026-03-21 215704.png",
+        sideCards: [
+          { title: "Competências" },
+          { title: "Responsabilidades" },
+          { title: "Área" }
+        ],
+        responsibilities: [
+          "",
+          "",
+          ""
+        ],
+        skills: [""],
+        achievements: [],
+        pdfs: [
+          {
+            file: "PRA_UFCD 0656_Ana_Silva.pdf",
+            titulo: "Pra",
+            subtitulo: "Reflexão da UFCD 0656"
+          }
+         ],
+        anexos: [
+          {
+            file:"Quiz_1_Ana_Silva.pdf",
+            titulo: "Quiz 1 - acordo ortográfico",
+            subtitulo: "Tarefa 1 - Quiz 1"
+          },
+          {
+            file: "Campanha_Comunicação_Interna_Ana_silva_Susana (2) (1).pdf",
+            titulo: "Tarefa 2 - Trabalho de Grupo",
+            subtitulo: "Campanha Comunicação Interna"
+          },
+          {
+            file: "Tríptico Brochura campanha_comunicação_interna_ana_silva_elizabete_gomes.pdf",
+            titulo: "Folheto com exercícios",
+            subtitulo: "Tarefa 3 - TG - extra "
+          }, 
+          {
+            file: "carta_formal.pdf",
+            titulo: "Carta Formal",
+            subtitulo: "Tarefa 4 "
+          },
+          {
+            file: "Quiz_Final_25TADM03-NS_Ana_Silva.pdf",
+            titulo: "Quiz Final",
+            subtitulo: "Tarefa 5 - Quiz Final de Avaliação "
+          }
+          ]
+      },
+      {
+        id: 7,
+        title: "0658 - Língua Inglesa - comunicação administrativa",
+        role: "Formadora: Lúcia Cargaleiro",
+        description: "Carga horária: 50 horas",
+        date: "Data da condocência - //26",
+        carouselImage: "generated-image (7).png",
+        cover: "Captura de ecrã 2026-03-21 215712.png",
+        sideCards: [
+           { title: "Competências" },
+          { title: "Responsabilidades" },
+          { title: "Área" }
+        ],
+        responsibilities: [
+          "",
+          "",
+          ""
+        ],
+        skills: [""],
+        achievements: [
+          ""
+        ],
+        pdfs: [
+          {
+            file: "",
+            titulo: "Pra",
+            subtitulo: "Reflexão da UFCD 0658"
+          }
+         ],
+        anexos: [
+          {
+            file:"",
+            titulo: "",
+            subtitulo: ""
+          },
+          {
+            file: "",
+            titulo: "",
+            subtitulo: ""
+          }
+        ]
+      },
+      {
+        id: 8,
+        title: "0659 - Língua Inglesa - documentação comercial",
+        role: "Formadora: Lúcia Cargaleiro",
+        description: "Carga horária: 50 horas",
+        date: "Data da condocência - //26",
+        carouselImage: "generated-image (8).png",
+        cover: "Captura de ecrã 2026-03-21 215720.png",
+        sideCards: [
+           { title: "Competências" },
+          { title: "Responsabilidades" },
+          { title: "Área" }
+        ],
+        responsibilities: [
+          "",
+          "",
+          ""
+        ],
+        skills: [""],
+        achievements: [],
+        pdfs: [
+          {
+            file: "",
+            titulo: "Pra",
+            subtitulo: "Reflexão da UFCD 0659"
+          }
+        ]
+      },
+      {
+        id: 9,
+        title: "0661 - Circuito documental na organização",
+        role: "Formador: Gabriel Cunha",
+        description: "Carga horária: 25 horas",
+        date: "Data da condocência - 03/12/25",
+        carouselImage: "generated-image (9).png",
+        cover: "Captura de ecrã 2026-03-21 215733.png",
+        sideCards: [
+           { title: "Competências" },
+          { title: "Responsabilidades" },
+          { title: "Área" }
+        ],
+        responsibilities: [
+          "",
+          "",
+          ""
+        ],
+        skills: [""],
+        achievements: [],
+        pdfs: [
+          {
+            file: "PRA_UFCD 0661 _Ana_Silva.pdf",
+            titulo: "Pra",
+            subtitulo: "Reflexão da UFCD 0661"
+          }
+         ],
+        anexos: [
+          {
+            file:"UFCD 0661 Circuito documental nas organizações_Grupo__25_TADM03-NS_AS_AA_LH_MR_MF_VL (2).pdf",
+            titulo: "Trabalho Grupo",
+            subtitulo: "Circuito Documental nas Organizações"
+          },
+          {
+            file: "TG_Circuito documental_25_TADM03-NS.pdf",
+            titulo: "Word - Trabalho de Grupo",
+            subtitulo: "Acesso ao TG - Circuito Documental das Organizações"
+          }
+        ]
+      },
+      {
+        id: 10,
+        title: "0664 - Aplicações informáticas de contabilidade",
+        role: "Formador: António César",
+        description: "Carga horária: 25 horas",
+        date: "Data da condocência - //26",
+        carouselImage: "ChatGPT Image 22_12_2025, 13_11_28.png",
+        cover: "Captura de ecrã 2026-03-21 220748.png",
+        sideCards: [
+           { title: "Competências" },
+          { title: "Responsabilidades" },
+          { title: "Área" }
+        ],
+        responsibilities: [
+          "",
+          "",
+          ""
+        ],
+        skills: [""],
+        achievements: [],
+        pdfs: [
+          {
+            file: "",
+            titulo: "PRA",
+            subtitulo: "Reflexão da UFCD 0664"
+          }
+        ]
+      },
+      {
+        id: 11,
+        title: "0666 - Noções básicas de fiscalidade e impostos sobre o consumo",
+        role: "Formadora: Tânia Amado",
+        description: "Carga horária: 50 horas",
+        date: "Data da condocência - 25/03/26",
+        carouselImage: "ChatGPT Image 22_12_2025, 13_15_27.png",
+        cover: "Captura de ecrã 2026-03-21 220756.png",
+        sideCards: [
+            { title: "Competências" },
+          { title: "Responsabilidades" },
+          { title: "Área" }
+        ],
+        responsibilities: ["Responsabilidade 1","Responsabilidade 2"],
+        skills: ["Skill 1","Skill 2"],
+        achievements: ["Realização 1"],
+        pdfs: [
+          {
+            file: "PRA_UFCD 0666_Ana_Silva.pdf",
+            titulo: "PRA",
+            subtitulo: "Reflexão da UFCD 0666"
+          }
+          ],
+        anexos: [
+          {
+            file:"trabalho_grupo_preambulo_IRS.pdf",
+            titulo: "Trabalho de Grupo",
+            subtitulo: "Preâmbulo do IRS"
+          },
+          {
+            file: "UFCD 0666 Noções básicas de fiscalidade e impostos sobre o consumo 25_TADM03_NS.pdf",
+            titulo: "Quiz final da UFCD",
+            subtitulo: "Teste Final "
+          }
+        ]
+      },
+      {
+        id: 12,
+        title: "0668 - Ficheiros de armazém e contas correntes",
+        role: "Formador: António César",
+        description: "Carga horária: 25 horas",
+        date: "Data da condocência - 19/09/25",
+        carouselImage: "ChatGPT Image 22_12_2025, 13_16_23.png",
+        cover: "Captura de ecrã 2026-03-21 220805.png",
+        sideCards: [
+            { title: "Competências" },
+          { title: "Responsabilidades" },
+          { title: "Área" }
+        ],
+        responsibilities: ["Responsabilidade 1","Responsabilidade 2"],
+        skills: ["Skill 1","Skill 2"],
+        achievements: ["Realização 1"],
+        pdfs: [
+          {
+            file: "PRA_UFCD 0668_Ana_Silva.pdf",
+            titulo: "PRA",
+            subtitulo: "Reflexão da UFCD 0668"
+          }
+         ],
+        anexos: [
+          {
+            file:"Apresentação_Ana_Silva.pdf",
+            titulo: "Tarefa 1 - Apresentação ",
+            subtitulo: "Logística e Organização de Armazéns",
+          },
+          {
+            file: "Armazens_Amazon_Ana_Silva_.pdf",
+            titulo: "Tarefa 2 - Word 1",
+            subtitulo: "Armazéns Amazon"
+          },
+          {
+            file: "Layout e Logistica de Armazéns _Ana_Silva_.pdf",
+            titulo: "Tarefa 3 - Word 2",
+            subtitulo: "Layout e Logistica de Armazéns _Ana_Silva"
+          }, 
+          {
+            file: "Micro_Negocios_organização de armazem _Ana_Silva_.pdf",
+            titulo: "Tarefa 4 - Word 3",
+            subtitulo: "Micro_Negocios_organização de armazem _Ana_Silva"
+          },
+          {
+            file: "ficha_de armazém_EXCEL_2.pdf",
+            titulo: "Tarefa 5 - Cálculos em Excel",
+            subtitulo: "ficha_de armazém_EXCEL_2"
+          }
+        ]
+      },
+      {
+        id: 13,
+        title: "0672 - Gestão Económica de compras",
+        role: "Formador: João Malaquias",
+        description: "Carga horária: 25 horas",
+        date: "Data da condocência - 21/04/26",
+        carouselImage: "ChatGPT Image 22_12_2025, 13_19_19.png",
+        cover: "Captura de ecrã 2026-03-21 220813.png",
+        sideCards: [
+          { title: "Competências" },
+          { title: "Responsabilidades" },
+          { title: "Área" }
+        ],
+        responsibilities: ["Responsabilidade 1","Responsabilidade 2"],
+        skills: ["Skill 1","Skill 2"],
+        achievements: ["Realização 1"],
+        pdfs: [
+          {
+            file: "",
+            titulo: "PRA",
+            subtitulo: "Reflexão da UFCD 0672"
+          }
+        ]
+      },
+      {
+        id: 14,
+        title: "0673 - Controlo de tesouraria",
+        role: "Formador: António César",
+        description: "Carga horária: 25 horas",
+        date: "Data da condocência - //",
+        carouselImage: "ChatGPT Image 21_03_2026, 22_25_53.png",
+        cover: "Captura de ecrã 2026-03-21 223456.png",
+        sideCards: [
+          { title: "Competências" },
+          { title: "Responsabilidades" },
+          { title: "Área" }
+        ],
+        responsibilities: ["Responsabilidade 1","Responsabilidade 2"],
+        skills: ["Skill 1","Skill 2"],
+        achievements: ["Realização 1"],
+        pdfs: [
+          {
+            file: "",
+            titulo: "PRA",
+            subtitulo: "Reflexão da UFCD 0673"
+          }
+        ]
+      },
+      {
+        id: 15,
+        title: "0674 - Função Pessoal - Legislação Laboral",
+        role: "Formadora: Ana Nunes",
+        description: "Carga horária: 25 horas",
+        date: "Data da condocência - //",
+        carouselImage: "ChatGPT Image 21_03_2026, 22_25_39.png",
+        cover: "Captura de ecrã 2026-03-21 223219.png",
+        sideCards: [
+           { title: "Competências" },
+          { title: "Responsabilidades" },
+          { title: "Área" }
+        ],
+        responsibilities: ["Responsabilidade 1","Responsabilidade 2"],
+        skills: ["Skill 1","Skill 2"],
+        achievements: ["Realização 1"],
+        pdfs: [
+          {
+            file: "pdfs/exp15_documento.pdf",
+            titulo: "PRA",
+            subtitulo: "Reflexão da UFCD 0674"
+          }
+        ]
+      },
+      {
+        id: 16,
+        title: "0676 - Legislação fiscal na função pessoal ",
+        role: "Formadora: Isabel Silva",
+        description: "Carga horária: 25 horas",
+        date: "Data da condocência - //",
+        carouselImage: "ChatGPT Image 21_03_2026, 22_27_47.png",
+        cover: "Captura de ecrã 2026-03-21 223623.png",
+        sideCards: [
+          { title: "Competências" },
+          { title: "Responsabilidades" },
+          { title: "Área" }
+        ],
+        responsibilities: ["Responsabilidade 1","Responsabilidade 2"],
+        skills: ["Skill 1","Skill 2"],
+        achievements: ["Realização 1"],
+        pdfs: [
+          {
+            file: "pdfs/exp16_documento.pdf",
+            titulo: "PRA",
+            subtitulo: "Reflexão da UFCD 0676"
+          }
+        ]
+      },
+      {
+        id: 17,
+        title: " 0677 - Recursos humanos - processos de recrutamento, seleção e admissão",
+        role: "Formadora: Daniela Almeida",
+        description: "Carga horária: 25 horas",
+        date: "Data da condocência - //",
+        carouselImage: "ChatGPT Image 21_03_2026, 22_28_45.png",
+        cover: "Captura de ecrã 2026-03-21 223631.png",
+        sideCards: [
+          { title: "Competências" },
+          { title: "Responsabilidades" },
+          { title: "Área" }
+        ],
+        responsibilities: ["Responsabilidade 1","Responsabilidade 2"],
+        skills: ["Skill 1","Skill 2"],
+        achievements: ["Realização 1"],
+        pdfs: [
+          {
+            file: "pdfs/exp17_documento.pdf",
+            titulo: "PRA",
+            subtitulo: "Reflexão da UFCD 0677"
+          }
+        ]
+      },
+      {
+        id: 18,
+        title: "0695 - Gestão Informatizada de documentos",
+        role: "Formador: Tiago Teixeira",
+        description: "Carga horária: 50 horas",
+        date: "Data da condocência - //",
+        carouselImage: "generated-image.png",
+        cover: "Captura de ecrã 2026-04-04 164942.png",
+        sideCards: [
+        { title: "Competências" },
+          { title: "Responsabilidades" },
+          { title: "Área" }
+        ],
+        responsibilities: ["Responsabilidade 1","Responsabilidade 2"],
+        skills: ["Skill 1","Skill 2"],
+        achievements: ["Realização 1"],
+        pdfs: [
+          {
+            file: "pdfs/exp18_documento.pdf",
+            titulo: "PRA",
+            subtitulo: "Reflexão da UFCD 0695"
+          }
+        ]
+      },
+      {
+        id: 19,
+        title: "0704 - Atendimento - técnicas de comunicação",
+        role: "Formadora: Ana Karin",
+        description: "Carga horária: 25 horas",
+        date: "Data da condocência - //",
+        carouselImage: "Ferramentas de comunicação e atendimento.png",
+        cover: "Captura de ecrã 2026-04-05 164335.png",
+        sideCards: [
+         { title: "Competências" },
+          { title: "Responsabilidades" },
+          { title: "Área" }
+        ],
+        responsibilities: ["Responsabilidade 1","Responsabilidade 2"],
+        skills: ["Skill 1","Skill 2"],
+        achievements: ["Realização 1"],
+        pdfs: [
+          {
+            file: "pdfs/exp19_documento.pdf",
+            titulo: "PRA",
+            subtitulo: "Reflexão da UFCD 0704"
+          }
+        ]
+      },
+      {
+        id: 20,
+        title: "0755 - Processador de texto - funcionalidades avançadas",
+        role: "Formador: Tiago Teixeira",
+        description: "Carga horária: 25 horas",
+        date: "Data da condocência - //",
+        carouselImage: "Processador de texto avançado em ação.png",
+        cover: "card20.png",
+        sideCards: [
+         { title: "Competências" },
+          { title: "Responsabilidades" },
+          { title: "Área" }
+        ],
+        responsibilities: ["Responsabilidade 1","Responsabilidade 2"],
+        skills: ["Skill 1","Skill 2"],
+        achievements: ["Realização 1"],
+        pdfs: [
+          {
+            file: "pdfs/exp20_documento.pdf",
+            titulo: "PRA",
+            subtitulo: "Reflexão da UFCD 0755"
+          }
+        ]
+      },
+      {
+        id: 21,
+        title: "1602 - Gestão de reclamações e conflitos com clientes/fornecedores",
+        role: "Formadora: Ana Karin",
+        description: "Carga horária: 50 horas",
+        date: "Data da condocência - //",
+        carouselImage: "Gestão de conflitos no escritório (1).png",
+        cover: "card21.png",
+        sideCards: [
+         { title: "Competências" },
+          { title: "Responsabilidades" },
+          { title: "Área" }
+        ],
+        responsibilities: ["Responsabilidade 1","Responsabilidade 2"],
+        skills: ["Skill 1","Skill 2"],
+        achievements: ["Realização 1"],
+        pdfs: [
+          {
+            file: "pdfs/exp21_documento.pdf",
+            titulo: "PRA",
+            subtitulo: "Reflexão da UFCD 1602"
+          }
+        ]
+      },
+      {
+        id: 22,
+        title: "6216 - Modelos de demonstrações financeiras ",
+        role: "Formadora: Isabel Policarpo",
+        description: "Carga horária: 50 horas",
+        carouselImage: "Análise de demonstrações financeiras no escritório.png",
+        cover: "Captura de ecrã 2026-04-04 184912.png",
+        sideCards: [
+         { title: "Competências" },
+          { title: "Responsabilidades" },
+          { title: "Área" }
+        ],
+        responsibilities: ["Responsabilidade 1","Responsabilidade 2"],
+        skills: ["Skill 1","Skill 2"],
+        achievements: ["Realização 1"],
+        pdfs: [
+          {
+            file: "pdfs/exp22_documento.pdf",
+            titulo: "PRA",
+            subtitulo: "Reflexão da UFCD 6216"
+          }
+        ]
+      },
+      {
+        id: 23,
+        title: "6222 - Introdução ao código de contas e normas contabilísticas",
+        role: "Formador: António Carmo",
+        description: "Carga horária: 25 horas",
+        carouselImage: "card23.png",
+        cover: "card23.png",
+        sideCards: [
+          { title: "Competências" },
+          { title: "Responsabilidades" },
+          { title: "Área" }
+        ],
+        responsibilities: ["Responsabilidade 1","Responsabilidade 2"],
+        skills: ["Skill 1","Skill 2"],
+        achievements: ["Realização 1"],
+        pdfs: [
+          {
+            file: "pdfs/exp23_documento.pdf",
+            titulo: "PRA",
+            subtitulo: "Reflexão da UFCD 6222"
+          }
+        ]
+      },
+      {
+        id: 24,
+        title: "6223 - Direito aplicado às empresas-algumas especificidades",
+        role: "Formadora: Ana Nunes",
+        description: "Carga horária: 25 horas",
+        carouselImage: "card24.png",
+        cover: "card24.png",
+        sideCards: [
+          { title: "Competências" },
+          { title: "Responsabilidades" },
+          { title: "Área" }
+        ],
+        responsibilities: ["Responsabilidade 1","Responsabilidade 2"],
+        skills: ["Skill 1","Skill 2"],
+        achievements: ["Realização 1"],
+        pdfs: [
+          {
+            file: "pdfs/exp24_documento.pdf",
+            titulo: "PRA",
+            subtitulo: "Reflexão da UFCD 6223"
+          }
+        ]
+      },
+      {
+        id: 25,
+        title: "6225 - Técnicas de normalização documental",
+        role: "Formador: Gabriel Cunha",
+        description: "Carga horária: 25 horas",
+        carouselImage: "Técnicas de normalização documental em prática.png",
+        cover: "card25.png",
+        sideCards: [
+         { title: "Competências" },
+          { title: "Responsabilidades" },
+          { title: "Área" }
+        ],
+        responsibilities: ["Responsabilidade 1","Responsabilidade 2"],
+        skills: ["Skill 1","Skill 2"],
+        achievements: ["Realização 1"],
+        pdfs: [
+          {
+            file: "pdfs/exp25_documento.pdf",
+            titulo: "PRA",
+            subtitulo: "Reflexão da UFCD 6225"
+          }
+        ]
+      },
+      {
+        id: 26,
+        title: "6227 - Tributação das pessoas coletivas (IRC)",
+        role: "Formador: António César",
+        description: "Carga horária: 25 horas",
+        carouselImage: "Curso de Tributação das Pessoas Coletivas.png",
+        cover: "Captura de ecrã 2026-04-04 184322.png",
+        sideCards: [
+         { title: "Competências" },
+          { title: "Responsabilidades" },
+          { title: "Área" }
+        ],
+        responsibilities: ["Responsabilidade 1","Responsabilidade 2"],
+        skills: ["Skill 1","Skill 2"],
+        achievements: ["Realização 1"],
+        pdfs: [
+          {
+            file: "pdfs/exp26_documento.pdf",
+            titulo: "PRA",
+            subtitulo: "Reflexão da UFCD 6227"
+          }
+        ]
+      },
+      {
+        id: 27,
+        title: "6231 - Língua espanhola - comunicação administrativa",
+        role: "Formadora: Cátia Leitão",
+        description: "Carga horária: 50 horas",
+        carouselImage: "Língua espanhola em contexto profissional.png",
+        cover: "Captura de ecrã 2026-04-04 184137.png",
+        sideCards: [
+           { title: "Competências" },
+          { title: "Responsabilidades" },
+          { title: "Área" }
+        ],
+        responsibilities: ["Responsabilidade 1","Responsabilidade 2"],
+        skills: [""],
+        achievements: ["Realização 1"],
+        pdfs: [
+          {
+            file: "pdfs/exp27_documento.pdf",
+            titulo: "PRA",
+            subtitulo: "Reflexão da UFCD 6231"
+          }
+        ]
+      },
+      {
+        id: 28,
+        title: "6736 - Recursos humanos - relatório único",
+        role: "Formadora: Isabel Policarpo",
+        description: "Carga horária: 25 horas",
+        carouselImage: "card28.png",
+        cover: "card28.png",
+        sideCards: [
+         { title: "Competências" },
+          { title: "Responsabilidades" },
+          { title: "Área" }
+        ],
+        responsibilities: ["Responsabilidade 1","Responsabilidade 2"],
+        skills: ["Skill 1","Skill 2"],
+        achievements: ["Realização 1"],
+        pdfs: [
+          {
+            file: "pdfs/exp28_documento.pdf",
+            titulo: "Documento Experiência 28",
+            subtitulo: "Relatório e detalhes da experiência."
+          }
+        ]
+      },
+      {
+        id: 29,
+        title: "7854 - Plano de negócio - criação de micronegócios",
+        role: "Formador: Gabriel Cunha",
+        description: "Carga horária: 25 horas",
+        carouselImage: "card29.png",
+        cover: "card29.png",
+        sideCards: [
+            { title: "Competências" },
+          { title: "Responsabilidades" },
+          { title: "Área" }
+        ],
+        responsibilities: ["Responsabilidade 1","Responsabilidade 2"],
+        skills: ["Skill 1","Skill 2"],
+        achievements: ["Realização 1"],
+        pdfs: [
+          {
+            file: "pdfs/exp29_documento.pdf",
+            titulo: "PRA",
+            subtitulo: "Reflexão da UFCD 7854"
+          }
+        ]
+      },
+      {
+        id: 30,
+        title: "8600 - Competências empreendoras e técnicas de procura de emprego",
+        role: "Formadora: Isabel Silva",
+        description: "Carga horária: 25 horas",
+        carouselImage: "card30.png",
+        cover: "card30.png",
+        sideCards: [
+           { title: "Competências" },
+          { title: "Responsabilidades" },
+          { title: "Área" }
+        ],
+        responsibilities: ["Responsabilidade 1","Responsabilidade 2"],
+        skills: ["Skill 1","Skill 2"],
+        achievements: ["Realização 1"],
+        pdfs: [
+          {
+            file: "pdfs/exp30_documento.pdf",
+            titulo: "PRA",
+            subtitulo: "Reflexão da UFCD 8600"
+          }
+        ]
+      },
+      {
+        id: 31,
+        title: "CLC_7 - Fundamentos de cultura, língua e comunicação",
+        role: "Formadora_ Gabriela Marques",
+        description: "Carga horária: 50 horas",
+        carouselImage: "card31.png",
+        cover: "card31.png",
+        sideCards: [
+           { title: "Competências" },
+          { title: "Responsabilidades" },
+          { title: "Área" }
+        ],
+        responsibilities: ["Responsabilidade 1","Responsabilidade 2"],
+        skills: ["Skill 1","Skill 2"],
+        achievements: ["Realização 1"],
+        pdfs: [
+          {
+            file: "pdfs/exp31_documento.pdf",
+            titulo: "PRA",
+            subtitulo: "Reflexão da UFCD CLC_7"
+          }
+        ]
+      },
+      {
+        id: 32,
+        title: "CLC_LEI_1 - Língua Estrangeira - iniciação - inglês",
+        role: "Formadora: Daniela Silva",
+        description: "Carga horária: 50 horas",
+        carouselImage: "card32.png",
+        cover: "card32.png",
+        sideCards: [
+          { title: "Competências" },
+          { title: "Responsabilidades" },
+          { title: "Área" }
+        ],
+        responsibilities: ["Responsabilidade 1","Responsabilidade 2"],
+        skills: ["Skill 1","Skill 2"],
+        achievements: ["Realização 1"],
+        pdfs: [
+          {
+            file: "pdfs/exp32_documento.pdf",
+            titulo: "PRA",
+            subtitulo: "Reflexão da UFCD CLC_LEI_1"
+          }
+        ]
+      },
+      {
+        id: 33,
+        title: "CLC_LEC_1 - Língua Estrangeira - continuação - inglês",
+        role: "Formadora: Daniela Silva",
+        description: "Carga horária: 50 horas",
+        carouselImage: "card33.png",
+        cover: "card33.png",
+        sideCards: [
+            { title: "Competências" },
+          { title: "Responsabilidades" },
+          { title: "Área" }
+        ],
+        responsibilities: ["Responsabilidade 1","Responsabilidade 2"],
+        skills: ["Skill 1","Skill 2"],
+        achievements: ["Realização 1"],
+        pdfs: [
+          {
+            file: "pdfs/exp33_documento.pdf",
+            titulo: "PRA",
+            subtitulo: "Reflexão da UFCD CLC_LEC_1"
+          }
+        ]
+      },
+      {
+        id: 34,
+        title: "STC_7 - Sociedade, tecnologia e ciência - fundamentos",
+        role: "Formadora: Patrícia Azevedo ",
+        description: "Carga horária: 50 horas",
+        carouselImage: "card34.png",
+        cover: "card34.png",
+        sideCards: [
+          { title: "Competências" },
+          { title: "Responsabilidades" },
+          { title: "Área" }
+        ],
+        responsibilities: ["Responsabilidade 1","Responsabilidade 2"],
+        skills: ["Skill 1","Skill 2"],
+        achievements: ["Realização 1"],
+        pdfs: [
+          {
+            file: "pdfs/exp34_documento.pdf",
+            titulo: "PRA",
+            subtitulo: "Reflexão da UFCD STC_7"
+          }
+        ]
+      }
+    ];
+
+    const carouselTrack=document.getElementById('carouselTrack');
+    const detailSection=document.getElementById('detailSection');
+    let selectedId=1;
+    const quadW=160;
+    const gap=38;
+    function enableDragScroll(container) {
+      let isDown = false;
+      let startY;
+      let scrollTop;
+    
+      container.addEventListener('mousedown', (e) => {
+        isDown = true;
+        container.style.cursor = 'grabbing';
+        startY = e.pageY;
+        scrollTop = container.scrollTop;
+      });
+    
+      container.addEventListener('mouseup', () => {
+        isDown = false;
+        container.style.cursor = 'grab';
+      });
+    
+      container.addEventListener('mouseleave', () => {
+        isDown = false;
+        container.style.cursor = 'grab';
+      });
+    
+      container.addEventListener('mousemove', (e) => {
+        if (!isDown) return;
+        e.preventDefault();
+        const walk = (e.pageY - startY);
+        container.scrollTop = scrollTop - walk;
+      });
+    }
+
+    function renderCarousel(){
+      experiencias.forEach(exp=>{
+        const wrapper=document.createElement('div');
+        wrapper.className='carousel-item-wrapper';
+        wrapper.innerHTML = `
+          <div class="carousel-item ${exp.id === 1 ? 'selected' : ''}"
+               onmouseenter="selectExperience(${exp.id})">
+            <img src="${exp.carouselImage}" alt="${exp.title}">
+            <span class="item-label">${exp.title}</span>
+          </div>
+        `;
+        carouselTrack.appendChild(wrapper);
+      });
+    }
+
+    function renderDetails(){
+      detailSection.innerHTML=experiencias.map(exp=>`
+        <div class="detail-inner" id="detail-${exp.id}" style="display:${exp.id===1?'grid':'none'};">
+          <img src="${exp.cover}" class="cover-image" alt="${exp.title}">
+
+          <div class="info-central">
+            <h1>${exp.title}</h1>
+            <p class="tagline">${exp.role}</p>
+            <p>${exp.description}</p>
+          </div>
+
+          <div class="details-column">
+            <div class="detail-box">
+              <div class="detail-box-content js-scroll-content">
+                <h3>📋 Responsabilidades</h3>
+                <ul>
+                  ${exp.responsibilities.map(r=>`<li>${r}</li>`).join('')}
+                </ul>
+
+                <div class="skills-section">
+                  <h3>🧠 Skills</h3>
+                  <div class="skills-wrap">
+                    ${exp.skills.map(skill=>`<span class="skill-tag">${skill}</span>`).join('')}
+                  </div>
+                </div>
+
+                <div class="skills-section">
+                  <h3>✨ Trabalhos Realizados</h3>
+                  <ul>
+                    ${exp.achievements.map(ach=>`<li>${ach}</li>`).join('')}
+                  </ul>
+                </div>
+              </div>
+              <div class="scroll-track"><div class="scroll-thumb"></div></div>
+            </div>
+
+            <div class="pdf-box">
+              <h3>📎 PRA</h3>
+              <div class="pdf-box-inner js-scroll-content">
+                ${(exp.pdfs || []).map(pdf=>`
+                  <a class="pdf-item" href="${pdf.file}" target="_blank">
+                    <div class="pdf-icon">PDF</div>
+                    <div>
+                      <div class="pdf-text-main">${pdf.titulo}</div>
+                      <div class="pdf-text-sub">${pdf.subtitulo}</div>
+                    </div>
+                  </a>
+                `).join('')}
+              </div>
+            
+              <h3>📎 Anexos</h3>
+              <div class="pdf-box-inner js-scroll-content">
+                ${(exp.anexos || []).map(anexo=>`
+                  <a class="pdf-item" href="${anexo.file}" target="_blank">
+                    <div class="pdf-icon">PDF</div>
+                    <div>
+                      <div class="pdf-text-main">${anexo.titulo}</div>
+                      <div class="pdf-text-sub">${anexo.subtitulo}</div>
+                    </div>
+                  </a>
+                `).join('')}
+              </div>
+            
+              <div class="scroll-track"><div class="scroll-thumb"></div></div>
+            </div>
+
+          </div>
+        </div>
+      `).join('');
+      initCustomScrollbars();
+    }
+
+    function initCustomScrollbars(){
+      document.querySelectorAll('.detail-box, .pdf-box').forEach(box=>{
+        const content = box.querySelector('.js-scroll-content');
+        const track = box.querySelector('.scroll-track');
+        const thumb = box.querySelector('.scroll-thumb');
+        if(!content || !track || !thumb) return;
+    
+        function updateThumb(){
+          const scrollHeight = content.scrollHeight;
+          const visible = content.clientHeight;
+          const maxScroll = scrollHeight - visible;
+    
+          if(maxScroll <= 0){
+            thumb.style.display = 'none';
+            return;
+          }
+    
+          thumb.style.display = 'block';
+          const trackHeight = track.clientHeight;
+          const thumbHeight = Math.max(25, visible / scrollHeight * trackHeight);
+          const ratio = content.scrollTop / maxScroll;
+          const maxThumbMove = trackHeight - thumbHeight;
+    
+          thumb.style.height = thumbHeight + 'px';
+          thumb.style.top = (ratio * maxThumbMove) + 'px';
+        }
+    
+        content.addEventListener('scroll', updateThumb);
+        updateThumb();
+    
+        // 🔥 Drag da thumb
+        let isDragging = false;
+        let startY = 0;
+        let startTop = 0;
+    
+        thumb.addEventListener('mousedown', (e) => {
+          isDragging = true;
+          startY = e.clientY;
+          startTop = parseFloat(thumb.style.top) || 0;
+          document.body.style.userSelect = 'none';
+        });
+    
+        document.addEventListener('mouseup', () => {
+          isDragging = false;
+          document.body.style.userSelect = '';
+        });
+    
+        document.addEventListener('mousemove', (e) => {
+          if (!isDragging) return;
+    
+          const deltaY = e.clientY - startY;
+          const trackHeight = track.clientHeight;
+          const thumbHeight = thumb.clientHeight;
+          const maxTop = trackHeight - thumbHeight;
+    
+          let newTop = startTop + deltaY;
+          newTop = Math.max(0, Math.min(newTop, maxTop));
+    
+          thumb.style.top = newTop + 'px';
+    
+          const scrollRatio = newTop / maxTop;
+          content.scrollTop = scrollRatio * (content.scrollHeight - content.clientHeight);
+        });
+    
+      }); 
+    } 
+
+    function selectExperience(id){
+      selectedId=id;
+      document.querySelectorAll('.carousel-item').forEach((item,idx)=>{
+        if(experiencias[idx].id===id)item.classList.add('selected');
+        else item.classList.remove('selected');
+      });
+      const idx=experiencias.findIndex(e=>e.id===id);
+      const offset=(quadW+gap)*idx+quadW/2;
+      carouselTrack.style.transform=
+        `translateX(calc(50vw - 90px - ${offset}px))`;
+      document.querySelectorAll('.detail-inner').forEach(d=>d.style.display='none');
+      document.getElementById(`detail-${id}`).style.display='grid';
+      initCustomScrollbars();
+    }
+
+    document.addEventListener('keydown',e=>{
+      const currentIdx=experiencias.findIndex(exp=>exp.id===selectedId);
+      if(e.key==='ArrowRight' && currentIdx<experiencias.length-1)
+        selectExperience(experiencias[currentIdx+1].id);
+      else if(e.key==='ArrowLeft' && currentIdx>0)
+        selectExperience(experiencias[currentIdx-1].id);
+    });
+
+    renderCarousel();
+    renderDetails();
+    selectExperience(1);
+  </script>
+</body>
+</html>
