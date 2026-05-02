@@ -1417,9 +1417,9 @@
               <div class="scroll-track"><div class="scroll-thumb"></div></div>
             </div>
 
-            <div class="detail-box">
+            <div class="pdf-box">
               <h3>📎 PRA</h3>
-              <div class="pdf-box-inner js-scroll-content">
+              <div class="detail-box-content js-scroll-content">
                 ${(exp.pdfs || []).map(pdf=>`
                   <a class="pdf-item" href="${pdf.file}" target="_blank">
                     <div class="pdf-icon">PDF</div>
@@ -1432,7 +1432,7 @@
               </div>
             
               <h3>📎 Anexos</h3>
-              <div class="pdf-box-inner js-scroll-content">
+              <div class="detail-box-content js-scroll-content">
                 ${(exp.anexos || []).map(anexo=>`
                   <a class="pdf-item" href="${anexo.file}" target="_blank">
                     <div class="pdf-icon">PDF</div>
