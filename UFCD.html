@@ -173,23 +173,26 @@
     }
 
     .pdf-box{
-      position:relative;
-      border-radius:16px;
-      border:2px solid #42aaff;
-      background:rgba(8,12,24,0.9);
-      padding:16px 18px;
-      box-shadow:0 10px 30px rgba(0,0,0,0.7);
-      max-height:280px;
-      overflow:hidden;
+      position: relative;
+      border-radius: 16px;
+      border: 2px solid #42aaff;
+      background: rgba(8,12,24,0.9);
+      padding: 16px 18px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.7);
+      max-height: 280px;
+      overflow: hidden;
     }
+    
     .pdf-box-inner{
-      max-height:248px;
-      overflow-y:auto;
-      padding-right:8px;
-      scrollbar-width:none;
+      max-height: 220px;
+      overflow-y: auto;
+      padding-right: 8px;
+      scrollbar-width: none;
     }
-    .pdf-box-inner::-webkit-scrollbar{width:0;}
-
+    
+    .pdf-box-inner::-webkit-scrollbar{
+      width: 0;
+    }
     .pdf-box h3{
       margin:0 0 10px;
       font-size:1em;
@@ -1392,7 +1395,7 @@
             <p>${exp.description}</p>
           </div>
 
-          <div class="details-column">
+                   <div class="details-column">
             <div class="detail-box">
               <div class="detail-box-content js-scroll-content">
                 <h3>📋 Responsabilidades</h3>
@@ -1417,7 +1420,7 @@
               <div class="scroll-track"><div class="scroll-thumb"></div></div>
             </div>
 
-            <div class="detail-box">
+            <div class="pdf-box">
               <h3>📎 PRA</h3>
               <div class="detail-box-content js-scroll-content">
                 ${(exp.pdfs || []).map(pdf=>`
@@ -1426,6 +1429,9 @@
                     <div>
                       <div class="pdf-text-main">${pdf.titulo}</div>
                       <div class="pdf-text-sub">${pdf.subtitulo}</div>
+                    </div>
+                    <div class="scroll-track">
+                      <div class="scroll-thumb"></div>
                     </div>
                   </a>
                 `).join('')}
@@ -1442,12 +1448,12 @@
                     </div>
                   </a>
                 `).join('')}
-              </div>
-            
+              </div>  
               <div class="scroll-track"><div class="scroll-thumb"></div></div>
             </div>
 
           </div>
+        </div>
         </div>
       `).join('');
       initCustomScrollbars();
