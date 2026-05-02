@@ -105,10 +105,16 @@
     }
 
     .details-column{
-      display:grid;
-      grid-template-columns:1fr 1fr;
-      gap:16px;
-      align-items:start;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      align-items: start;
+    }
+    
+    .right-column{
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
     }
 
     .detail-box{
@@ -1394,52 +1400,51 @@
             <p class="tagline">${exp.role}</p>
             <p>${exp.description}</p>
           </div>
-
-                   <div class="details-column">
+          <div class="details-column">
             <div class="detail-box">
               <div class="detail-box-content js-scroll-content">
                 <h3>📋 Responsabilidades</h3>
                 <ul>
-                  ${exp.responsibilities.map(r=>`<li>${r}</li>`).join('')}
+                  ${exp.responsibilities.map(r => `<li>${r}</li>`).join('')}
                 </ul>
-
+          
                 <div class="skills-section">
                   <h3>🧠 Skills</h3>
                   <div class="skills-wrap">
-                    ${exp.skills.map(skill=>`<span class="skill-tag">${skill}</span>`).join('')}
+                    ${exp.skills.map(skill => `<span class="skill-tag">${skill}</span>`).join('')}
                   </div>
                 </div>
-
+          
                 <div class="skills-section">
                   <h3>✨ Trabalhos Realizados</h3>
                   <ul>
-                    ${exp.achievements.map(ach=>`<li>${ach}</li>`).join('')}
+                    ${exp.achievements.map(ach => `<li>${ach}</li>`).join('')}
                   </ul>
                 </div>
               </div>
               <div class="scroll-track"><div class="scroll-thumb"></div></div>
             </div>
-
+          
             <div class="pdf-box">
               <h3>📎 PRA</h3>
-              <div class="detail-box-content js-scroll-content">
-                ${(exp.pdfs || []).map(pdf=>`
+              <div class="pdf-box-inner js-scroll-content">
+                ${(exp.pdfs || []).map(pdf => `
                   <a class="pdf-item" href="${pdf.file}" target="_blank">
                     <div class="pdf-icon">PDF</div>
                     <div>
                       <div class="pdf-text-main">${pdf.titulo}</div>
                       <div class="pdf-text-sub">${pdf.subtitulo}</div>
                     </div>
-                    <div class="scroll-track">
-                      <div class="scroll-thumb"></div>
-                    </div>
                   </a>
                 `).join('')}
               </div>
-            
+              <div class="scroll-track"><div class="scroll-thumb"></div></div>
+            </div>
+          
+            <div class="pdf-box">
               <h3>📎 Anexos</h3>
-              <div class="detail-box-content js-scroll-content">
-                ${(exp.anexos || []).map(anexo=>`
+              <div class="pdf-box-inner js-scroll-content">
+                ${(exp.anexos || []).map(anexo => `
                   <a class="pdf-item" href="${anexo.file}" target="_blank">
                     <div class="pdf-icon">PDF</div>
                     <div>
@@ -1448,10 +1453,9 @@
                     </div>
                   </a>
                 `).join('')}
-              </div>  
+              </div>
               <div class="scroll-track"><div class="scroll-thumb"></div></div>
             </div>
-
           </div>
         </div>
         </div>
