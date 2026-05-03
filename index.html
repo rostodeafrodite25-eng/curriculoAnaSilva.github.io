@@ -898,7 +898,7 @@
     </div>
   </div>
   
-  <div id="biblioModalOverlay">
+  <div id="agradecModalOverlay">
     <div id="agradecToggleBtn">
       <h2>Agradecimentos</h2>
       <p style="text-align: justify; line-height: 1.6; font-family: sans-serif;">
@@ -916,7 +916,7 @@
       </p>
       <div class="modal-buttons">
         <!-- Botão para fechar o modal de bibliografia -->
-        <button class="modal-btn" id="biblioCloseBtn">Fechar</button>
+        <button class="modal-btn" id="agredcCloseBtn">Fechar</button>
       </div>
     </div>
   </div>
@@ -1329,8 +1329,9 @@
       agradecModal.classList.add('visible');
     });
     
-    // Lógica para fechar o modal (provavelmente já tem para os outros)
-    // Basta adicionar o fecho para este novo modal
+    document.getElementById('agradecToggleBtn').addEventListener('click', () => {
+    document.getElementById('agradecModalOverlay').classList.add('visible');
+    });
 
     
   // ===== MODAL BIBLIOGRAFIA =====
