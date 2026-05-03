@@ -898,7 +898,7 @@
     </div>
   </div>
   <div id="biblioModalOverlay">
-    <div id="biblioModal">
+    <div id="agradecToggleBtn">
       <h2>Agradecimentos</h2>
       <p style="text-align: justify; line-height: 1.6; font-family: sans-serif;">
         Este portfólio não teria sido possível sem as pessoas que, de uma forma ou de outra, fizeram parte deste percurso.
@@ -1316,6 +1316,19 @@
     }, 15000);
   }
 
+    // Selecionar o novo botão e o novo modal
+    const agradecBtn = document.getElementById('agradecToggleBtn');
+    const agradecModal = document.getElementById('agradecModalOverlay');
+    
+    // Função para abrir o modal de agradecimentos
+    agradecBtn.addEventListener('click', () => {
+      agradecModal.classList.add('visible');
+    });
+    
+    // Lógica para fechar o modal (provavelmente já tem para os outros)
+    // Basta adicionar o fecho para este novo modal
+
+    
   // ===== MODAL BIBLIOGRAFIA =====
   const biblioModalOverlayEl = document.getElementById('biblioModalOverlay');
   const biblioToggleBtnEl = document.getElementById('biblioToggleBtn');
