@@ -247,6 +247,26 @@
       font-size: 0.88em;      /* Tamanho de fonte */
     }
 
+    /* Posicionamento do novo botão */
+    #agradecToggleBtn {
+      top: 210px; /* Ajustado para ficar abaixo do segundo botão */
+    }
+    
+    /* Estilo do modal (deve ser igual aos outros modais) */
+    #agradecModalOverlay {
+      position: fixed; inset: 0; background: rgba(0, 0, 0, 0.55);
+      display: none; align-items: center; justify-content: center; z-index: 9000;
+    }
+    #agradecModalOverlay.visible { display: flex; }
+    
+    #agradecModal {
+      background: rgba(9, 16, 32, 0.96); border-radius: 18px; padding: 24px 30px;
+      max-width: 520px; color: #f5f7fa; border: 1px solid rgba(255, 255, 255, 0.18);
+    }
+
+
+
+    
     /* ===== TOP HUD ===== */
     .top-hud {
       position: fixed;                   /* Barra superior fixa no topo */
@@ -922,29 +942,11 @@
     </div>
   </div>
 
-
-
-
   
   <!-- BOTÕES LATERAIS: acesso ao resumo/índice e à bibliografia -->
-  <button id="infoToggleBtn" class="hidden">
-    <!-- Barrinha azul decorativa -->
-    <span class="icon"></span>
-    <!-- Texto do botão -->
-    <span>Índice</span>
-  </button>
-
-
-  
-  <button id="biblioToggleBtn">
-    <span class="icon"></span>
-    <span>Introdução</span>
-  </button>
-  <button id="agradecToggleBtn">
-    <span class="icon"></span>
-    <span>Agradecimentos</span>
-  </button>
-
+   <button id="infoToggleBtn"><span class="icon"></span><span>Índice</span></button>
+   <button id="biblioToggleBtn"><span class="icon"></span><span>Introdução</span></button>
+   <button id="agradecToggleBtn"><span class="icon"></span><span>Agradecimentos</span></button>
   
   <!-- HUD TOPO: barra fixa no topo com data/hora e perfil -->
   <div class="top-hud">
@@ -1330,9 +1332,10 @@
       agradecModal.classList.add('visible');
     });
     
-    document.getElementById('agradecToggleBtn').addEventListener('click', () => {
-    document.getElementById('agradecModalOverlay').classList.add('visible');
-    });
+  // Lógica para abrir o modal de Agradecimentos
+  document.getElementById('agradecToggleBtn').addEventListener('click', () => {
+  document.getElementById('agradecModalOverlay').classList.add('visible');
+  });
 
     
   // ===== MODAL BIBLIOGRAFIA =====
