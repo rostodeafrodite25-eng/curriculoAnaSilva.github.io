@@ -247,23 +247,23 @@
       font-size: 0.88em;      /* Tamanho de fonte */
     }
 
-    /* Posicionamento do novo botão */
     #agradecToggleBtn {
-      top: 210px; /* Ajustado para ficar abaixo do segundo botão */
+      position: fixed; left: 32px; top: 210px; z-index: 8000;
+      background: rgba(10, 20, 40, 0.90); color: #eaf5ff;
+      border-radius: 0 999px 999px 0; border: 1px solid rgba(66, 170, 255, 0.6);
+      padding: 8px 14px; display: flex; align-items: center; gap: 8px;
+      cursor: pointer; font-size: 0.78em; letter-spacing: .08em;
+      text-transform: uppercase; box-shadow: 0 6px 16px rgba(0, 0, 0, 0.7);
     }
-    
-    /* Estilo do modal (deve ser igual aos outros modais) */
+    #agradecToggleBtn span.icon {
+      width: 8px; height: 26px; border-radius: 999px;
+      background: linear-gradient(180deg, #14aaff, #75d5ff);
+    }
     #agradecModalOverlay {
       position: fixed; inset: 0; background: rgba(0, 0, 0, 0.55);
       display: none; align-items: center; justify-content: center; z-index: 9000;
     }
     #agradecModalOverlay.visible { display: flex; }
-    
-    #agradecModal {
-      background: rgba(9, 16, 32, 0.96); border-radius: 18px; padding: 24px 30px;
-      max-width: 520px; color: #f5f7fa; border: 1px solid rgba(255, 255, 255, 0.18);
-    }
-
 
 
     
@@ -919,8 +919,8 @@
     </div>
   </div>
   
-  <div id="agradecModalOverlay">
-    <div id="agradecToggleBtn">
+   <div id="agradecModalOverlay">
+    <div id="biblioModal">
       <h2>Agradecimentos</h2>
       <p style="text-align: justify; line-height: 1.6; font-family: sans-serif;">
         Este portfólio não teria sido possível sem as pessoas que, de uma forma ou de outra, fizeram parte deste percurso.
@@ -934,10 +934,8 @@
         À Andreia e à Beatriz — por terem surgido num momento em que eu precisava, mesmo sem o dizer. Porque, quando mais precisei, apareceram sem perguntas e ficaram sem condições. Pela escuta, pela presença e pela forma como me fizeram sentir compreendida, sem necessidade de explicar. Num percurso exigente, foram um ponto de equilíbrio. Duas mulheres, duas mães, que, à sua maneira, também se estão a construir — e que, com a sua leveza e verdade, marcaram este caminho.
         Ao José — pela sua forma única e espontânea de cumprimentar, sempre com energia, e pela boa disposição que trouxe leveza a este percurso, uma amizade que irá ficar.
         Ao Miguel — pelas conversas, pela partilha e pelos pequenos gestos do dia a dia, como as uvas partilhadas, que ficam na memória.
-      </p>
       <div class="modal-buttons">
-        <!-- Botão para fechar o modal de bibliografia -->
-        <button class="modal-btn" id="agredcCloseBtn">Fechar</button>
+        <button class="modal-btn secondary" onclick="document.getElementById('agradecModalOverlay').classList.remove('visible')">Fechar</button>
       </div>
     </div>
   </div>
@@ -1332,8 +1330,7 @@
       agradecModal.classList.add('visible');
     });
     
-  // Lógica para abrir o modal de Agradecimentos
-  document.getElementById('agradecToggleBtn').addEventListener('click', () => {
+   document.getElementById('agradecToggleBtn').addEventListener('click', () => {
   document.getElementById('agradecModalOverlay').classList.add('visible');
   });
 
